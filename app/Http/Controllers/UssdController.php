@@ -23,7 +23,7 @@ class UssdController extends Controller
             switch($text){
                 case "":
                     if($this->isGlo($phoneNumber) == "false"){
-                        $response = "END You have to be Glo subscriber to use participate.\n";
+                        $response = "END You have to be Glo subscriber to participate.\n";
                         echo $response;
                         break;
                     }
