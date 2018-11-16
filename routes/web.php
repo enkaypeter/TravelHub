@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::post('/ussd','UssdController@show');
+Route::post('/check','UssdController@check');

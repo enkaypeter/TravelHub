@@ -16,10 +16,17 @@ class UssdController extends Controller
             $serviceCode    =   $_POST['serviceCode'];
             $phoneNumber    =   $_POST['phoneNumber'];
             $text           =   $_POST['text'];
+            
+        
             // $textArray      =   explode('*', $text);
             // $userResponse   =   trim(end($textArray));
             switch($text){
                 case "":
+                    if($this->isGlo($phoneNumber) == "false"){
+                        $response = "END You have to be Glo subscriber to use participate.\n";
+                        echo $response;
+                        break;
+                    }
                     $response = "CON Please choose a party.\n"; 
                     foreach ($parties as $key => $value) {
                         $response   .=    " $key. $value.\n"; 
@@ -124,6 +131,23 @@ class UssdController extends Controller
             return $e->getMessage();
         }
     }
+
+    public function isGlo($phoneNum){
+        $count = 0;
+        $first5 = substr($phoneNum,0, 7);
+        $glo_nums = array("+234705","+234905", "+234807", "+234815", "+234811", "+234905");
+        foreach ($glo_nums as $val) {
+            if($val !== $first5){
+                $count++;
+            }
+        }
+        if($count == 6){
+            return "false";
+        }else{
+            return "true";
+        }
+    }
+
 
     
 }
