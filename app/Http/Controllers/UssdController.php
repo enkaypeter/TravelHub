@@ -22,11 +22,11 @@ class UssdController extends Controller
             // $userResponse   =   trim(end($textArray));
             switch($text){
                 case "":
-                    if($this->isGlo($phoneNumber) == "false"){
-                        $response = "END You have to be Glo subscriber to participate.\n";
-                        echo $response;
-                        break;
-                    }
+                    // if($this->isGlo($phoneNumber) == "false"){
+                    //     $response = "END You have to be Glo subscriber to participate.\n";
+                    //     echo $response;
+                    //     break;
+                    // }
                     $response = "CON Please choose a party.\n"; 
                     foreach ($parties as $key => $value) {
                         $response   .=    " $key. $value.\n"; 
@@ -121,15 +121,20 @@ class UssdController extends Controller
     }
 
     public function getCumulative($modelVar,$party){
-        $id =   1;
         try{
-            $count  = $modelVar::select($party)->where('id',1)->first();
-            $val = $count->$party;
-            $res    = "END $val ";
-            return $res;
+            $top3  = $modelVar::get()->toArray();
         }catch(\Exception $e){
             return $e->getMessage();
         }
+        arsort($top3[0]);
+        $top3 = array_slice($top3[0], 0, 3);
+        $res = "END ";
+        $count = 1;
+        foreach ($top3 as $key => $val) {
+            $res .= "$count. $key - $val\n"; 
+            $count++;
+        }
+        return $res;
     }
 
     public function isGlo($phoneNum){
